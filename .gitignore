@@ -1,4 +1,7 @@
 *.a
 *.o
 *.d
-.idea/*
+.idea/
+ann/bin/
+bin/
+registration/trimesh2/bin.Linux64
