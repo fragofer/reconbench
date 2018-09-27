@@ -1,4 +1,9 @@
 default:
+	mkdir -p ann/lib
+	mkdir -p OpenMesh/lib
+	mkdir -p modeling/lib
+	mkdir -p sampler/lib
+	mkdir -p evaluator/lib
 	(cd ann; make linux-g++)
 	(cd OpenMesh; make)
 	(cd pbrt/src; make)
