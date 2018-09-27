@@ -23,6 +23,9 @@ libraries/executables are not included and are necessary:
 These libraries/executables can easily be obtained through most linux distros, and are also easy to grab
 for mac (i.e. macports).
 
+For ubuntu users simply run:
+ sudo apt-get install freeglut3-dev liblapacke-dev libopenblas-dev libpng-dev bison flex
+
 ----------------
 Surface Modeling
 ----------------
