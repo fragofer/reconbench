@@ -14,7 +14,8 @@ DEFS = -DNDEBUG -DPBRT_PROBES_NONE
 CXX=g++
 CXXFLAGS = -O3 -I$(OPENMESH_INC) $(PBRT_INCS) -I$(ANN_INC)
 LDFLAGS = -O3 -L$(OPENMESH_LIB) -L$(MODELING_LIB) -L$(SAMPLER_LIB) -L$(PBRT_LIB) -L$(ANN_LIB)
-CXX_LIBS = -lpng14 -lblas -llapack -lmodeling -lsampler -lOpenMeshCore -lpbrt -ldl -lANN
+CXX_LIBS = -lmodeling -lsampler -lOpenMeshCore -lpbrt -ldl -lANN -lpng16 -lblas -llapack
+
 
 ifeq ($(TERM_PROGRAM), Apple_Terminal)
 	CXXFLAGS += -DHAS_MALLOC=0
