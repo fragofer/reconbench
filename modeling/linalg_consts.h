@@ -27,6 +27,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef LINALG_CONSTS_H
 #define LINALG_CONSTS_H
 
-#define FORTRANIZE(name) LAPACK_ ## name
+#define FORTRANIZE(name) name ## _
 
 #endif

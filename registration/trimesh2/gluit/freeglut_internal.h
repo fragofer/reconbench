@@ -69,8 +69,14 @@
 /*
  * Those files should be available on every platform.
  */
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
 #include <GL/gl.h>
 #include <GL/glu.h>
+#endif
+
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -86,10 +92,21 @@
  * The system-dependant include files should go here:
  */
 #if TARGET_HOST_UNIX_X11
+    #if defined(__APPLE__)
+    #include <glx.h>
+    #include <X11/Xlib.h>
+    #include <X11/Xatom.h>
+    #include <X11/keysym.h>
+    #else
     #include <GL/glx.h>
     #include <X11/Xlib.h>
     #include <X11/Xatom.h>
     #include <X11/keysym.h>
+    #endif
+
+//    #include <X11/Xlib.h>
+//    #include <X11/Xatom.h>
+//    #include <X11/keysym.h>
 
     #ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
     #include <X11/extensions/xf86vmode.h>

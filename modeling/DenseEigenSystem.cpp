@@ -25,7 +25,18 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "DenseEigenSystem.h"
-#include <lapacke.h>
+
+extern "C"  {
+	void FORTRANIZE(dspevx)(
+			char* all, char* range, char* upper, int* dim, double* matrix, double* dummy, double* dummy1, int* dummy2, int* dummy3,
+			double* tolerance, int* numEigen, double* eigvalues, double* eigvectors, int* mat_dim, double* workspace, int* workspace1,
+			int* fail, int* info
+	);
+
+	double FORTRANIZE(dlamch)(
+			char* prec
+	);
+}
 
 DenseEigenSystem::DenseEigenSystem(DenseMatrix *_matrix, int _il, int _iu)  {
 	matrix = _matrix;
@@ -45,7 +56,7 @@ void DenseEigenSystem::solve()  {
 
 	// dlamch('S') - accuracy
 	char epsilon = 'S';
-	double tolerance = 2.0*LAPACK_dlamch(&epsilon);
+	double tolerance = 2.0*FORTRANIZE(dlamch)(&epsilon);
 
 	// setup upper-triangular matrix from symmetric matrix
 	int mat_dim = matrix->rows();
@@ -74,7 +85,7 @@ void DenseEigenSystem::solve()  {
 	int *iwork_space = new int[6*mat_dim], info, *fail = new int[mat_dim];
 
 	// compute eigenvectors & eigenvalues
-	LAPACK_dspevx(&all, &range, &upper, &mat_dim, upperTriangular, &dummy_double0, &dummy_double1, &il, &iu,
+	FORTRANIZE(dspevx)(&all, &range, &upper, &mat_dim, upperTriangular, &dummy_double0, &dummy_double1, &il, &iu,
 			 &tolerance, &numEigen, flattened_values, flattened_vectors, &mat_dim, work_space, iwork_space, fail, &info);
 
 	if(info != 0)  {

@@ -199,19 +199,21 @@ class threaded_alignment {
   // This stuff really doesn't need to be in a struct, it
   // could just be member data.  But this leads to a marginally
   // less verbose initialization using memcpy.
-  const opts_t &opts;
-  const vector<char *> &mesh_names;
-  const vector<corr_vector> &corrs;
-  const vector<point> &targets;
-  const vector<bool> &use_points;
-  const vector<float> &confidence;
-  TriMesh *points_mesh;
-  const vector<TriMesh::Face> &all_faces;
-  threaded_alignment *ta;
+  struct align_scan_struct {
+    const opts_t &opts;
+    const vector<char *> &mesh_names;
+    const vector<corr_vector> &corrs;
+    const vector<point> &targets;
+    const vector<bool> &use_points;
+    const vector<float> &confidence;
+    TriMesh *points_mesh;
+    const vector<TriMesh::Face> &all_faces;
+    threaded_alignment *ta;
+  } data;
 
   static void *alignment_thread(void *data) {
     size_t i;
-      threaded_alignment *d = (threaded_alignment *) data;
+    align_scan_struct *d = (align_scan_struct *) data;
     while ((i = d->ta->count()) < d->mesh_names.size()) {
       align_scan(d->opts, d->mesh_names[i], d->corrs[i],
                   d->targets, d->use_points, d->confidence,
@@ -237,16 +239,17 @@ class threaded_alignment {
   threaded_alignment(const opts_t &opts, const vector<char *> &mesh_names,
                      const vector<corr_vector> &corrs, const vector<point> &targets,
                      const vector<bool> &use_points, const vector<float> &confidence,
-                     TriMesh *points_mesh, const vector<TriMesh::Face> &all_faces) : opts(opts), mesh_names(mesh_names),
-                     corrs(corrs), targets(targets), use_points(use_points), confidence(confidence), points_mesh(points_mesh),
-                     all_faces(all_faces), ta(this) {
-    counter = 0;
+                     TriMesh *points_mesh, const vector<TriMesh::Face> &all_faces) : counter(0) {
     pthread_mutex_init(&counter_mutex, NULL);
     pthread_mutex_init(&mesh_mutex, NULL);
 
+    align_scan_struct d = { opts, mesh_names, corrs, targets, use_points,
+             confidence, points_mesh, all_faces, this };
+    memcpy(&data, &d, sizeof(align_scan_struct));
+
     threads.resize(opts.nthreads);
     for (int i = 0; i < opts.nthreads; i++) {
-      pthread_create(&threads[i], NULL, alignment_thread, (void *) this);
+      pthread_create(&threads[i], NULL, alignment_thread, (void *) &data);
     }
   }
 

@@ -279,7 +279,7 @@ public:
   }
 
   void set_texcoord1D(VertexHandle _vh, const TexCoord1D& _t) {
-      this->property(vertex_texcoords1D_, _vh) = _t;
+    property(vertex_texcoords1D_, _vh) = _t;
   }
 
 
@@ -294,7 +294,7 @@ public:
   }
 
   void set_texcoord2D(VertexHandle _vh, const TexCoord2D& _t) {
-      this->property(vertex_texcoords2D_, _vh) = _t;
+    this->property(vertex_texcoords2D_, _vh) = _t;
   }
 
 
@@ -309,7 +309,7 @@ public:
   }
 
   void set_texcoord3D(VertexHandle _vh, const TexCoord3D& _t) {
-      this->property(vertex_texcoords3D_, _vh) = _t;
+    property(vertex_texcoords3D_, _vh) = _t;
   }
  
   //.------------------------------------------------------ halfedge 1D texcoords
@@ -323,7 +323,7 @@ public:
   }
 
   void set_texcoord1D(HalfedgeHandle _heh, const TexCoord1D& _t) {
-      this->property(halfedge_texcoords1D_, _heh) = _t;
+    property(halfedge_texcoords1D_, _heh) = _t;
   }
 
 
@@ -338,7 +338,7 @@ public:
   }
 
   void set_texcoord2D(HalfedgeHandle _heh, const TexCoord2D& _t) {
-      this->property(halfedge_texcoords2D_, _heh) = _t;
+    property(halfedge_texcoords2D_, _heh) = _t;
   }
 
 
@@ -353,7 +353,7 @@ public:
   }
 
   void set_texcoord3D(HalfedgeHandle _heh, const TexCoord3D& _t) {
-      this->property(halfedge_texcoords3D_, _heh) = _t;
+    property(halfedge_texcoords3D_, _heh) = _t;
   }
   
   //-------------------------------------------------------------- face normals

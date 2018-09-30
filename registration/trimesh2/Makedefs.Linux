@@ -3,7 +3,7 @@ CXX = g++
 AR = ar
 
 COPTS = -m32 -march=native -mfpmath=sse
-COPTS += -fopenmp
+# COPTS += -fopenmp
 XLIBDIR = /usr/X11R6/lib
 
 ifdef DEBUG

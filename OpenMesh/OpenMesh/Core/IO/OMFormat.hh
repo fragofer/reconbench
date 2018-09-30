@@ -360,6 +360,7 @@ namespace OMFormat {
 #else
   template <typename T> Chunk::Integer_Size integer_size(const T& d)
 #endif
+
   {
     assert( is_integer(d) );
 
@@ -373,8 +374,7 @@ namespace OMFormat {
     return Chunk::Integer_Size(0);
   }
 
-
-  // Convert size of type to FLoat_Size 
+  // Convert size of type to FLoat_Size
 #ifdef NDEBUG
   template <typename T> Chunk::Float_Size float_size(const T&)
 #else
@@ -398,8 +398,8 @@ namespace OMFormat {
   unsigned int bits(const T& val)
   {
     return is_integer(val)
-           ? (static_cast<unsigned int>(integer_size(val)))
-           : (static_cast<unsigned int>(float_size(val)));
+      ? (static_cast<unsigned int>(integer_size(val)))
+      : (static_cast<unsigned int>(float_size(val)));
   }
 
   // -------------------- create/read version

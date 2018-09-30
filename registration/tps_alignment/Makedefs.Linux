@@ -24,12 +24,15 @@ ifeq ($(CC), icc)
   endif
 else # gcc
   ifdef DEBUG
-    COPTS =  -Wall -W -Wno-write-strings -Wno-non-virtual-dtor -Wno-empty-body -g -ggdb3 -fno-strict-aliasing -fopenmp
+    COPTS =  -Wall -W -Wno-write-strings -Wno-non-virtual-dtor -Wno-empty-body -g -ggdb3 -fno-strict-aliasing
+    # COPTS =  -Wall -W -Wno-write-strings -Wno-non-virtual-dtor -Wno-empty-body -g -ggdb3 -fno-strict-aliasing -fopenmp
   else
     ifeq ($(SUB_ARCH), sse2)
-      COPTS = -march=pentium4 -mfpmath=sse -msse2 -fopenmp
+      COPTS = -march=pentium4 -mfpmath=sse -msse2
+      # COPTS = -march=pentium4 -mfpmath=sse -msse2 -fopenmp
     else
-      COPTS = -march=native -fopenmp
+      COPTS = -march=native
+      # COPTS = -march=native -fopenmp
       ifeq ($(SUB_ARCH), pentium-m)
         COPTS += -mfpmath=sse -msse2
       endif
