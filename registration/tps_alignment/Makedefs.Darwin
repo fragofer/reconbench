@@ -38,7 +38,7 @@ ifeq ($(ARCH),i386)
 endif
 
 ifeq ($(ARCH),x86_64)
-	XLIBDIR = /usr/X11R6/lib64
+	XLIBDIR = /usr/X11R6/lib
 endif
 
 CXXOPTS = $(COPTS)

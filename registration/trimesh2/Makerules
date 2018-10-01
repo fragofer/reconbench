@@ -45,6 +45,8 @@ else
 	endif
 endif
 
+UNAME := Darwin
+
 ifndef DESTDIR
         DESTDIR = .
 endif

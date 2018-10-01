@@ -11,7 +11,7 @@ OPENMESH_LIB = ../OpenMesh/lib
 ANN_LIB = ../ann/lib
 
 CXXFLAGS = -g -I$(OPENMESH_INC) -I$(ANN_INC) -I/usr/include/libpng16
-LDFLAGS = -lblas -lmodeling -llapack -llapacke -L$(MODELING_LIB) -L$(OPENMESH_LIB) -lOpenMeshCore -L$(ANN_LIB) -lANN -lpng16
+LDFLAGS = -lblas -lmodeling -llapack -L$(MODELING_LIB) -L$(OPENMESH_LIB) -lOpenMeshCore -L$(ANN_LIB) -lANN -lpng16
 
 CXXFLAGS += -DHAS_TEEM=0
 

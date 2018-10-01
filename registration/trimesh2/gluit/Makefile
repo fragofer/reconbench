@@ -1,8 +1,9 @@
 #DEBUG = y
 MAKERULESDIR = ..
 DESTDIR = ../lib.$(UNAME)
-INCLUDES = -I/Users/shaibianchi/anaconda3/pkgs/tk-8.6.7-h35a86e2_3/include -I../include -I../include/GL -I/opt/local/include/xcb
-# -I/opt/local/include/X11
+INCLUDES = -I../include -I../include/GL
+#-I/opt/X11/include -I/opt/X11/include/GL
+
 
 include $(MAKERULESDIR)/Makerules
 
