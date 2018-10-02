@@ -25,7 +25,36 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include "DenseMatrix.h"
-#include <lapacke.h>
+
+extern "C"  {
+	// LU factorization
+	void FORTRANIZE(dgetrf)(
+			int* rows, int* columns, double* matrix, int* columns2, int* pivot, int* info
+	);
+
+	// linear system
+	void FORTRANIZE(dgesv)(
+			int* size, int* singleRHS, double* system, int* size2, int* pivots, double* rhs, int* size3, int* info
+	);
+
+	// linear least squares by way of QR factorization
+	void FORTRANIZE(dgels)(
+			char* trans, int* rows, int* columns, int* singleRHS, double* system, int* rows2, double* rhs, int* rows3,
+			double* workspace, int* workspaceDim, int* info
+	);
+
+	// linear least squares by way of svd
+	void FORTRANIZE(dgelsd)(
+			int* rows, int* columns, int* singleRHS, double* system, int* rows2, double* rhs, int* rows3,
+			double* singularValues, double* cond, int* rank, double* workspace, int* workspaceDim, int* iwork, int* info
+	);
+
+	// SVD
+	void FORTRANIZE(dgesvd)(
+			char* U, char* V, int* rows, int* columns, double* matrix, int* rows2, double* singularValues, double* uMatrix, int* rows3, double* vMatrix, int* columns2,
+			double* workspace, int* workspaceDim, int* info
+	);
+}
 
 DenseMatrix::DenseMatrix()  {
 	R = 1;
@@ -379,7 +408,7 @@ void DenseMatrix::luFactorization(DenseMatrix *_lMatrix, DenseMatrix *_uMatrix) 
 	double *lu_matrix = formLAPACKMatrix();
 	int *pivot = new int[C], info = 10;
 
-	LAPACK_dgetrf(&R, &C, lu_matrix, &C, pivot, &info);
+	FORTRANIZE(dgetrf)(&R, &C, lu_matrix, &C, pivot, &info);
 	DenseMatrix *lapack_matrix = new DenseMatrix(lu_matrix, R, C);
 	DenseMatrix *full_matrix = lapack_matrix->transpose();
 
@@ -423,7 +452,7 @@ BLinAlg::Vector* DenseMatrix::linearSystem(BLinAlg::Vector* _rhs)  {
 	double* rhs_data = _rhs->dataCopy();
 	int info;
 
-	LAPACK_dgesv(&R, &singleRHS, lapack_matrix, &R, pivotArray, rhs_data, &R, &info);
+	FORTRANIZE(dgesv)(&R, &singleRHS, lapack_matrix, &R, pivotArray, rhs_data, &R, &info);
 
 	if(info != 0)
 		cerr << "Error on linear solver." << endl;
@@ -455,7 +484,7 @@ BLinAlg::Vector* DenseMatrix::linearLeastSquares(BLinAlg::Vector* _rhs)  {
 	int info = 10;
 
 	// first query for workspace size
-	LAPACK_dgelsd(&R, &C, &singleRHS, lapack_matrix, &R, rhs_data, &R,
+	FORTRANIZE(dgelsd)(&R, &C, &singleRHS, lapack_matrix, &R, rhs_data, &R,
 			singularValues, &cond, &rank, workspace, &workspace_size, iwork, &info);
 
 	workspace_size = (int)workspace[0];
@@ -463,7 +492,7 @@ BLinAlg::Vector* DenseMatrix::linearLeastSquares(BLinAlg::Vector* _rhs)  {
 	workspace = new double[workspace_size];
 
 	// then solve it
-	LAPACK_dgelsd(&R, &C, &singleRHS, lapack_matrix, &R, rhs_data, &R,
+	FORTRANIZE(dgelsd)(&R, &C, &singleRHS, lapack_matrix, &R, rhs_data, &R,
 			singularValues, &cond, &rank, workspace, &workspace_size, iwork, &info);
 
 	if(info != 0)
@@ -492,7 +521,7 @@ void DenseMatrix::svd(DenseMatrix *_uMatrix, double *_singularValues, DenseMatri
 	// perform svd
 	workspace_dim = 7*C;
 	double *workspace = new double[workspace_dim];
-	LAPACK_dgesvd(&returnU, &returnV, &R, &C, lapack_matrix, &R, _singularValues, lapack_u, &R, lapack_v, &C, workspace, &workspace_dim, &info);
+	FORTRANIZE(dgesvd)(&returnU, &returnV, &R, &C, lapack_matrix, &R, _singularValues, lapack_u, &R, lapack_v, &C, workspace, &workspace_dim, &info);
 
 	// set the matrices - right singular vectors, then left singular vectors
 	int ind = 0;
