@@ -237,6 +237,7 @@ int main(int argc, char** argv)  {
 	result = system(exec_gnu_anglemax);
 
 	char rm_exec[500];
-	sprintf(rm_exec, "rm %s %s %s %s %s %s %s %s %s %s %s %s", distmean_filename.c_str(), distmax_filename.c_str(), anglemean_filename.c_str(), anglemax_filename.c_str(), distmean_gnu_filename.c_str(), distmax_gnu_filename.c_str(), anglemean_gnu_filename.c_str(), anglemax_gnu_filename.c_str(), distmean_eps_filename.c_str(), distmax_eps_filename.c_str(), anglemean_eps_filename.c_str(), anglemax_eps_filename.c_str());
+//	sprintf(rm_exec, "rm %s %s %s %s %s %s %s %s %s %s %s %s", distmean_filename.c_str(), distmax_filename.c_str(), anglemean_filename.c_str(), anglemax_filename.c_str(), distmean_gnu_filename.c_str(), distmax_gnu_filename.c_str(), anglemean_gnu_filename.c_str(), anglemax_gnu_filename.c_str(), distmean_eps_filename.c_str(), distmax_eps_filename.c_str(), anglemean_eps_filename.c_str(), anglemax_eps_filename.c_str());
+	sprintf(rm_exec, "rm %s %s %s %s %s %s %s %s", distmean_gnu_filename.c_str(), distmax_gnu_filename.c_str(), anglemean_gnu_filename.c_str(), anglemax_gnu_filename.c_str(), distmean_eps_filename.c_str(), distmax_eps_filename.c_str(), anglemean_eps_filename.c_str(), anglemax_eps_filename.c_str());
 	result = system(rm_exec);
 }
