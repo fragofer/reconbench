@@ -29,6 +29,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Vector.h"
 #include "Vector3.h"
+#include "linalg_consts.h"
 
 #include <string>
 
