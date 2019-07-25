@@ -101,7 +101,7 @@ public:
 	for (it2=it+1; it2!=end; ++it2)
 	  if (*it == *it2)
 	  {
-//	    omerr() << "ImporterT: Face has equal vertices\n";
+	    omerr() << "ImporterT: Face has equal vertices\n";
 	    failed_faces_.push_back(_indices);
 	    return fh;
 	  }
