@@ -23,4 +23,4 @@ clean:
 	(cd modeling; make clean)
 	(cd sampler; make clean)
 	(cd evaluator; make clean)
-    (cd recon/poisson; make clean)
+	(cd recon/poisson; make clean)
