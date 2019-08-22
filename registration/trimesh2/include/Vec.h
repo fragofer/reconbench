@@ -77,60 +77,6 @@ template <> struct VEC_STATIC_ASSERTION_FAILURE<true>
 	{ void operator () () {} };
 #define VEC_STATIC_CHECK(expr) VEC_STATIC_ASSERTION_FAILURE<bool(expr)>()
 
-// Utility functions for square and cube, to go along with sqrt and cbrt
-template <class T>
-static inline T sqr(const T &x)
-{
-	return x*x;
-}
-
-template <class T>
-static inline T cube(const T &x)
-{
-	return x*x*x;
-}
-
-
-// Sign of a scalar
-template <class T>
-static inline T sgn(const T &x)
-{
-	return (x < T(0)) ? T(-1) : T(1);
-}
-
-
-// Utility functions based on GLSL
-template <class T>
-static inline T fract(const T &x)
-{
-	return x - floor(x);
-}
-
-template <class T>
-static inline T clamp(const T &x, const T &a, const T &b)
-{
-	return x > a ? x < b ? x : b : a;  // returns a on NaN
-}
-
-template <class T, class S>
-static inline T mix(const T &x, const T &y, const S &a)
-{
-	return (S(1)-a) * x + a * y;
-}
-
-template <class T>
-static inline T step(const T &x, const T &a)
-{
-	return x < a ? T(0) : T(1);
-}
-
-template <class T>
-static inline T smoothstep(const T &x, const T &a, const T &b)
-{
-	if (b <= a) return step(x,a);
-	T t = (x - a) / (b - a);
-	return t <= T(0) ? T(0) : t >= T(1) ? T(1) : t * t * (T(3) - T(2) * t);
-}
 
 template <int D, class T = float>
 class Vec {
@@ -487,6 +433,14 @@ static inline const T len(const Vec<D,T> &v)
 	return sqrt(len2(v));
 }
 
+
+// Utility functions for square and cube, to go along with sqrt and cbrt
+template <class T>
+static inline T sqr(const T &x)
+{
+	return x*x;
+}
+
 template <int D, class T>
 static inline const T dist2(const Vec<D,T> &v1, const Vec<D,T> &v2)
 {
@@ -526,6 +480,54 @@ template <class T>
 static inline T trinorm(const T &v0, const T &v1, const T &v2)
 {
 	return (typename T::value_type) 0.5 * ((v1 - v0) CROSS (v2 - v0));
+}
+
+template <class T>
+static inline T cube(const T &x)
+{
+	return x*x*x;
+}
+
+
+// Sign of a scalar
+template <class T>
+static inline T sgn(const T &x)
+{
+	return (x < T(0)) ? T(-1) : T(1);
+}
+
+
+// Utility functions based on GLSL
+template <class T>
+static inline T fract(const T &x)
+{
+	return x - floor(x);
+}
+
+template <class T>
+static inline T clamp(const T &x, const T &a, const T &b)
+{
+	return x > a ? x < b ? x : b : a;  // returns a on NaN
+}
+
+template <class T, class S>
+static inline T mix(const T &x, const T &y, const S &a)
+{
+	return (S(1)-a) * x + a * y;
+}
+
+template <class T>
+static inline T step(const T &x, const T &a)
+{
+	return x < a ? T(0) : T(1);
+}
+
+template <class T>
+static inline T smoothstep(const T &x, const T &a, const T &b)
+{
+	if (b <= a) return step(x,a);
+	T t = (x - a) / (b - a);
+	return t <= T(0) ? T(0) : t >= T(1) ? T(1) : t * t * (T(3) - T(2) * t);
 }
 
 template <int D, class T>

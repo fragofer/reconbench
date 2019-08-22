@@ -77,7 +77,7 @@ T Basis<D,T>::excess(const Vec<D,T> &p) const
 {
 	T e = -current_sqr_r;
 	for (int k = 0; k < D; k++)
-		e += sqr(p[k] - current_c[k]);
+		e += sqr<T>(p[k] - current_c[k]);
 	return e;
 }
 

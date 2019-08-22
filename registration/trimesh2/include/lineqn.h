@@ -12,6 +12,7 @@ the fancy C++ template thing happening.
 
 #include <cmath>
 #include <algorithm>
+#include <Vec.h>
 using std::sqrt;
 using std::fabs;
 
@@ -188,7 +189,7 @@ static inline void eigdc(T A[N][N], T d[N])
 			T invscale = T(1.0 / scale);
 			for (int k = 0; k < i; k++) {
 				d[k] *= invscale;
-				h += sqr(d[k]);
+				h += sqr<T>(d[k]);
 			}
 			T f = d[i-1];
 			T g = (f > 0.0) ? -std::sqrt(h) : std::sqrt(h);
