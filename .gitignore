@@ -2,6 +2,8 @@
 *.o
 *.d
 .idea/
-ann/bin/
+.DS_Store
+ann/bin
 bin/
 registration/trimesh2/bin.Linux64
+registration/trimesh2/bin.Darwin

@@ -195,4 +195,4 @@ endif
 $(RENDERER_BINARY): $(RENDERER_OBJS) $(CORE_LIB)
 
 clean:
-	rm -f objs/* bin/* core/pbrtlex.[ch]* core/pbrtparse.[ch]*
+	rm -f objs/* bin/* core/pbrtlex.[ch]* core/pbrtparse.[ch]* core/pbrtparse.output

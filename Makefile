@@ -12,6 +12,7 @@ default:
 	(cd modeling; make)
 	(cd sampler; make)
 	(cd evaluator; make)
+	(cd recon/poisson; make)
 
 clean:
 	(cd ann; make realclean)
@@ -22,3 +23,4 @@ clean:
 	(cd modeling; make clean)
 	(cd sampler; make clean)
 	(cd evaluator; make clean)
+	(cd recon/poisson; make clean)

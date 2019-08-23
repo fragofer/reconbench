@@ -165,6 +165,7 @@ public:
   typedef typename Kernel::ConstFaceFaceIter         ConstFaceFaceIter;
   //@}
 
+  using Kernel::set_point;
 
   // --- constructor/destructor
   PolyMeshT() {}
@@ -181,7 +182,7 @@ public:
   inline VertexHandle new_vertex(const Point& _p)
   {
     VertexHandle vh(Kernel::new_vertex());
-    this->set_point(vh, _p);
+    set_point(vh, _p);
     return vh;
   }
 
