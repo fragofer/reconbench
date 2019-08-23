@@ -211,9 +211,9 @@ Vector<T2> SparseMatrix<T>::operator * (const Vector<T2>& V) const
 template<class T>
 SparseMatrix<T> SparseMatrix<T>::Transpose() const
 {
-	SparseMatrix<T> M( Columns(), Rows() );
+	SparseMatrix<T> M( this->Columns(), this->Rows() );
 
-	for (int i=0; i<Rows(); i++)
+	for (int i=0; i< this->Rows(); i++)
 	{
 		for(int ii=0;ii<m_ppElements[i].size();ii++){
 			M(m_ppElements[i][ii].N,i) = m_ppElements[i][ii].Value;
@@ -425,7 +425,7 @@ Vector<T2> SparseNMatrix<T,Dim>::operator * (const NVector<T2,Dim>& V) const
 	
 	for (int i=0; i<rows; i++)
 	{
-		T2 temp();
+		T2 temp;
 		for(int ii=0;ii<rowSizes[i];ii++){
 			for(int jj=0;jj<Dim;jj++){temp+=m_ppElements[i][ii].Value[jj]*V.m_pV[m_ppElements[i][ii].N][jj];}
 		}
