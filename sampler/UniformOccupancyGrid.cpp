@@ -84,7 +84,7 @@ void UniformOccupancyGrid::post_process()  {
 		}
 	}
 
-	delete temp_binary;
+	delete[] temp_binary;
 }
 
 double UniformOccupancyGrid::grid_march(Vector3 _pt, Vector3 _dir)  {
