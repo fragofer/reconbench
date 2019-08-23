@@ -1,10 +1,9 @@
 # DEBUG = y
 MAKERULESDIR = ..
-include $(MAKERULESDIR)/Makerules
 DESTDIR = ../lib.$(UNAME)
 INCLUDES = -I../include
 
-
+include $(MAKERULESDIR)/Makerules
 
 CCFILES =	TriMesh_bounding.cc \
 		TriMesh_connectivity.cc \

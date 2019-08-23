@@ -52,10 +52,9 @@ ifndef DESTDIR
 endif
 
 OBJDIR = OBJ.$(UNAME)
-LIBBDIR = lib.$(UNAME)
-all: $(LIBBDIR) $(OBJDIR) $(DESTDIR) default
+all: $(OBJDIR) $(DESTDIR) default
 
-$(LIBBDIR) $(OBJDIR) $(DESTDIR):
+$(OBJDIR) $(DESTDIR):
 	-mkdir $@
 
 ifdef MAKERULESDIR

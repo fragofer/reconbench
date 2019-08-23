@@ -34,11 +34,11 @@ else # gcc
 endif
 
 ifeq ($(ARCH),i386)
-	XLIBDIR = /usr/X11R6/lib
+	XLIBDIR = /usr/X11/lib
 endif
 
 ifeq ($(ARCH),x86_64)
-	XLIBDIR = /usr/X11R6/lib
+	XLIBDIR = /usr/X11/lib
 endif
 
 CXXOPTS = $(COPTS)

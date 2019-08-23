@@ -28,7 +28,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define PNGIMAGE_H
 
 #if HAS_MALLOC
-#include <malloc.h>
+#include <stdlib.h>
+//#include <malloc.h>
 #endif
 #include <iostream>
 #include <png.h>
