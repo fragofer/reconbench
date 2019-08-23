@@ -254,7 +254,7 @@ int MPUOctree::partition_points(int* point_ids)  {
 	num_fits++;
 	// otherwise, get the two normals who form a max angle deviation, and cluster normals into 2 groups
 	double min_dot_2 = 1e10;
-	Vector3 feature_n1(0,0,0), feature_n2;(0,0,0);
+	Vector3 feature_n1(0,0,0), feature_n2(0,0,0);
 	for(int p = 0; p < this->size(); p++)  {
 		MPUTri* p_tri = tris[ tri_inds[p] ];
 		Vector3 p_normal = p_tri->normal;
@@ -346,7 +346,7 @@ int MPUOctree::partition_points(int* point_ids)  {
 
 	// otherwise, break up this group, return
 	double min_dot_5 = 1e10;
-	Vector3 feature_n1_prime(0,0,0), feature_n2_prime;(0,0,0);
+	Vector3 feature_n1_prime(0,0,0), feature_n2_prime(0,0,0);
 	for(int p = 0; p < this->size(); p++)  {
 		if(point_ids[p] != group_split)
 			continue;
