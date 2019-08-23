@@ -26,10 +26,10 @@ for mac (i.e. macports).
 
 ### Libraries required for building:
 ```
- sudo apt-get install freeglut3-dev libopenblas-dev libpng-dev bison flex 
+ sudo apt-get install freeglut3-dev libopenblas-dev libpng-dev bison flex
 ```
 
-### Optional packages (for visualization): 
+### Optional packages (for visualization):
 ```
  sudo apt-get install gnuplot ffmpeg texlive-font-utils
 ```

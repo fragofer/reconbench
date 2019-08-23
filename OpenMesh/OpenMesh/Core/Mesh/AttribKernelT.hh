@@ -150,7 +150,7 @@ public:
 
     if (FAttribs & Attributes::Status)
       Connectivity::request_face_status();
-    //FIXME: data properties might actually cost storage even 
+    //FIXME: data properties might actually cost storage even
     //if there are no data traits??
     add_property(data_vpph_);
     add_property(data_fpph_);
@@ -169,7 +169,7 @@ public:
 //   AttribKernelT(const AttribKernelT& _rhs)
 //     : BaseKernel(_rhs)
 //   { operator=(_rhs); }
-// 
+//
 //   AttribKernelT& operator=(const AttribKernelT& _rhs)
 //   {
 //     // remove old properties
@@ -183,10 +183,10 @@ public:
 //     remove_property(face_normals_);
 //     remove_property(face_colors_);
 //     remove_property(face_status_);
-// 
+//
 //     // parent deep-copies properties
 //     BaseKernel::operator=(_rhs);
-// 
+//
 //     // copy property handles
 //     points_            = _rhs.points_;
 //     vertex_normals_    = _rhs.vertex_normals_;
@@ -198,7 +198,7 @@ public:
 //     face_normals_      = _rhs.face_normals_;
 //     face_colors_       = _rhs.face_colors_;
 //     face_status_       = _rhs.face_status_;
-// 
+//
 //     // copy ref-counts
 //     refcount_vnormals_   = _rhs.refcount_vnormals_;
 //     refcount_vcolors_    = _rhs.refcount_vcolors_;
@@ -218,56 +218,56 @@ public:
       All other information (like e.g. attributes or additional
       elements from traits classes) is not copied.
       \note If you want to copy all information, including *custom* properties,
-      use PolyMeshT::operator=() instead.  
+      use PolyMeshT::operator=() instead.
       TODO: version which copies standard properties specified by the user
   */
   template <class _AttribKernel>
   void assign(const _AttribKernel& _other)
   {
     assign_connectivity(_other);
-    for (typename Connectivity::VertexIter v_it = Connectivity::vertices_begin(); 
+    for (typename Connectivity::VertexIter v_it = Connectivity::vertices_begin();
          v_it != Connectivity::vertices_end(); ++v_it)
     {//assumes Point constructor supports cast from _AttribKernel::Point
       set_point(v_it, (Point)_other.point(v_it));
-    }    
+    }
   }
 
   //-------------------------------------------------------------------- points
 
-  const Point* points() const 
+  const Point* points() const
   { return property(points_).data(); }
 
-  const Point& point(VertexHandle _vh) const 
+  const Point& point(VertexHandle _vh) const
   { return property(points_, _vh); }
 
-  Point& point(VertexHandle _vh) 
+  Point& point(VertexHandle _vh)
   { return property(points_, _vh); }
 
-  void set_point(VertexHandle _vh, const Point& _p) 
+  void set_point(VertexHandle _vh, const Point& _p)
   { property(points_, _vh) = _p; }
 
 
   //------------------------------------------------------------ vertex normals
 
-  const Normal* vertex_normals() const 
+  const Normal* vertex_normals() const
   { return property(vertex_normals_).data(); }
 
-  const Normal& normal(VertexHandle _vh) const 
+  const Normal& normal(VertexHandle _vh) const
   { return property(vertex_normals_, _vh); }
 
-  void set_normal(VertexHandle _vh, const Normal& _n) 
+  void set_normal(VertexHandle _vh, const Normal& _n)
   { property(vertex_normals_, _vh) = _n; }
 
 
   //------------------------------------------------------------- vertex colors
 
-  const Color* vertex_colors() const 
+  const Color* vertex_colors() const
   { return property(vertex_colors_).data(); }
 
   const Color& color(VertexHandle _vh) const
   { return property(vertex_colors_, _vh); }
 
-  void set_color(VertexHandle _vh, const Color& _c) 
+  void set_color(VertexHandle _vh, const Color& _c)
   { property(vertex_colors_, _vh) = _c; }
 
 
@@ -314,9 +314,9 @@ public:
   void set_texcoord3D(VertexHandle _vh, const TexCoord3D& _t) {
     property(vertex_texcoords3D_, _vh) = _t;
   }
- 
+
   //.------------------------------------------------------ halfedge 1D texcoords
-  
+
   const TexCoord1D* htexcoords1D() const {
     return property(halfedge_texcoords1D_).data();
   }
@@ -358,13 +358,13 @@ public:
   void set_texcoord3D(HalfedgeHandle _heh, const TexCoord3D& _t) {
     property(halfedge_texcoords3D_, _heh) = _t;
   }
-  
+
   //-------------------------------------------------------------- face normals
 
-  const Normal& normal(FaceHandle _fh) const 
+  const Normal& normal(FaceHandle _fh) const
   { return property(face_normals_, _fh); }
 
-  void set_normal(FaceHandle _fh, const Normal& _n) 
+  void set_normal(FaceHandle _fh, const Normal& _n)
   { property(face_normals_, _fh) = _n; }
 
   //--------------------------------------------------------------- face colors
@@ -389,37 +389,37 @@ public:
       add_property( vertex_colors_, "v:colors" );
   }
 
-  void request_vertex_texcoords1D() 
+  void request_vertex_texcoords1D()
   {
     if (!refcount_vtexcoords1D_++)
       add_property( vertex_texcoords1D_, "v:texcoords1D" );
   }
 
-  void request_vertex_texcoords2D() 
+  void request_vertex_texcoords2D()
   {
     if (!refcount_vtexcoords2D_++)
       add_property( vertex_texcoords2D_, "v:texcoords2D" );
   }
 
-  void request_vertex_texcoords3D() 
+  void request_vertex_texcoords3D()
   {
     if (!refcount_vtexcoords3D_++)
       add_property( vertex_texcoords3D_, "v:texcoords3D" );
   }
 
-  void request_halfedge_texcoords1D() 
+  void request_halfedge_texcoords1D()
   {
     if (!refcount_htexcoords1D_++)
       add_property( halfedge_texcoords1D_, "h:texcoords1D" );
   }
 
-  void request_halfedge_texcoords2D() 
+  void request_halfedge_texcoords2D()
   {
     if (!refcount_htexcoords2D_++)
       add_property( halfedge_texcoords2D_, "h:texcoords2D" );
   }
 
-  void request_halfedge_texcoords3D() 
+  void request_halfedge_texcoords3D()
   {
     if (!refcount_htexcoords3D_++)
       add_property( halfedge_texcoords3D_, "h:texcoords3D" );
@@ -549,7 +549,7 @@ public:
 
   HalfedgeTexCoords3DPropertyHandle           halfedge_texcoords3D_pph() const
   { return halfedge_texcoords3D_; }
- 
+
 	//standard face properties
   FaceNormalsPropertyHandle                 face_normals_pph() const
   { return face_normals_; }
