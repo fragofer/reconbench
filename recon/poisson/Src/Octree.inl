@@ -732,7 +732,7 @@ OctNode<NodeData,Real>& OctNode<NodeData,Real>::operator = (const OctNode<NodeDa
 	if(children){delete[] children;}
 	children=NULL;
 
-	depth=node.depth;
+	d=short(node.depth());
 	for(i=0;i<DIMENSION;i++){this->offset[i] = node.offset[i];}
 	if(node.children){
 		initChildren();
@@ -742,7 +742,7 @@ OctNode<NodeData,Real>& OctNode<NodeData,Real>::operator = (const OctNode<NodeDa
 }
 template <class NodeData,class Real>
 int OctNode<NodeData,Real>::CompareForwardDepths(const void* v1,const void* v2){
-	return ((const OctNode<NodeData,Real>*)v1)->depth-((const OctNode<NodeData,Real>*)v2)->depth;
+	return ((const OctNode<NodeData,Real>*)v1)->depth()-((const OctNode<NodeData,Real>*)v2)->depth();
 }
 template <class NodeData,class Real>
 int OctNode<NodeData,Real>::CompareForwardPointerDepths(const void* v1,const void* v2){
@@ -761,7 +761,7 @@ int OctNode<NodeData,Real>::CompareForwardPointerDepths(const void* v1,const voi
 }
 template <class NodeData,class Real>
 int OctNode<NodeData,Real>::CompareBackwardDepths(const void* v1,const void* v2){
-	return ((const OctNode<NodeData,Real>*)v2)->depth-((const OctNode<NodeData,Real>*)v1)->depth;
+	return ((const OctNode<NodeData,Real>*)v2)->depth()-((const OctNode<NodeData,Real>*)v1)->depth();
 }
 template <class NodeData,class Real>
 int OctNode<NodeData,Real>::CompareBackwardPointerDepths(const void* v1,const void* v2){
