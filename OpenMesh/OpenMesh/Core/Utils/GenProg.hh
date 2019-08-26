@@ -70,7 +70,7 @@ typedef Bool2Type<false> False;
 /// compile time assertions 
 template <bool Expr> struct AssertCompile;
 template <> struct AssertCompile<true> {};
-template <> struct AssertCompile<false> {};
+
 
 //--- Template "if" w/ partial specialization ---------------------------------
 #if OM_PARTIAL_SPECIALIZATION

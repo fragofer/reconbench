@@ -1,3 +1,36 @@
+Introduction
+-------------
+
+Article website:
+
+http://www.cs.utah.edu/~bergerm/recon_bench/
+
+Download datasets:
+
+```
+cd data
+wget -i dataset.txt
+for f in *.tar.gz; do tar -xvf "$f"; done
+rm *.tar.gz
+``` 
+
+Docker
+------
+Download the docker image
+```
+docker pull fragofer/reconbench
+```
+Run an interactive terminal inside a container
+```
+docker run --rm -it fragofer/reconbench bash
+```
+
+Run an specific command inside the container
+```
+docker run --rm fragofer/reconbench distance <arg>
+```
+
+ 
 An Evaluation and Comparison of Surface Reconstruction
 ------------------------------------------------------
 
@@ -19,6 +52,7 @@ libraries/executables are not included and are necessary:
 - ffmpeg
 - gnuplot
 - epstopdf
+
 These libraries/executables can easily be obtained through most linux distros, and are also easy to grab
 for mac (i.e. macports).
 

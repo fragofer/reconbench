@@ -1,0 +1,10 @@
+https://www.cs.utah.edu/~bergerm/recon_bench/point/pcs/gargoyle.tar.gz
+https://www.cs.utah.edu/~bergerm/recon_bench/point/pcs/gargoyle.mpu
+https://www.cs.utah.edu/~bergerm/recon_bench/point/pcs/dc.tar.gz
+https://www.cs.utah.edu/~bergerm/recon_bench/point/pcs/dc.mpu
+https://www.cs.utah.edu/~bergerm/recon_bench/point/pcs/lord_quas.tar.gz
+https://www.cs.utah.edu/~bergerm/recon_bench/point/pcs/lord_quas.mpu
+https://www.cs.utah.edu/~bergerm/recon_bench/point/pcs/anchor.tar.gz
+https://www.cs.utah.edu/~bergerm/recon_bench/point/pcs/anchor.mpu
+https://www.cs.utah.edu/~bergerm/recon_bench/point/pcs/daratech.tar.gz
+https://www.cs.utah.edu/~bergerm/recon_bench/point/pcs/daratech.mpu

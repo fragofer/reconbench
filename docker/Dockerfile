@@ -15,11 +15,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       libopenblas-dev \
       libpng-dev
 
-RUN git clone https://github.com/fragofer/reconbench.git
+RUN git clone --depth 1 https://github.com/fragofer/reconbench.git
 
 WORKDIR /reconbench
 
 RUN make
+
+ENV PATH="/reconbench/bin:${PATH}"
 
 # ENV NB_USER keras
 # ENV NB_UID 1014
