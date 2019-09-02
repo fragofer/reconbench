@@ -1,7 +1,7 @@
 Introduction
 -------------
 
-Article website:
+Reconbench original website:
 
 http://www.cs.utah.edu/~bergerm/recon_bench/
 
@@ -12,7 +12,7 @@ cd data
 wget -i dataset.txt
 for f in *.tar.gz; do tar -xvf "$f"; done
 rm *.tar.gz
-``` 
+```
 
 Docker
 ------
@@ -30,7 +30,18 @@ Run an specific command inside the container
 docker run --rm fragofer/reconbench distance <arg>
 ```
 
+Rebuild the image
+
+```
+git clone https://github.com/fragofer/reconbench
+cd reconbench/docker
+docker build -t fragofer/reconbench .
+```
+
+Note that in above example, the container name `reconbench` is local to your computer.
+
  
+
 An Evaluation and Comparison of Surface Reconstruction
 ------------------------------------------------------
 
