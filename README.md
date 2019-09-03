@@ -16,7 +16,12 @@ rm *.tar.gz
 
 Docker
 ------
+The docker image contains all the dataset and compiled binaries in a contarized ubuntu 18.04. However, if you want to build the binaries or even the image on your own refer to my github:
+
+http://github.com/fragofer/reconbench
+
 Download the docker image
+
 ```
 docker pull fragofer/reconbench
 ```
@@ -110,7 +115,7 @@ the implicit function:
 stay within the bounds of the MPU surface definition.
   - `output_surface` is the resulting isosurface, either off or obj format.
 
-Included in modeling/models is an example implicit surface, bumps, used in the "simple shapes" part
+Included in `modeling/models` is an example implicit surface, bumps, used in the "simple shapes" part
 of the benchmark.
 
 Synthetic Scanning
@@ -125,12 +130,12 @@ files, followed by executing the configuration files to obtain the point cloud. 
   - `implicit_surface` is an MPU surface file - may be specified as absolute path, or if in reconbench directory,
 can specify as relative.
   - `config_base` represents the base file name at which the configuration, and subsequently point cloud, files
-will be stored. Depending on the number of parameters set, files will be labeled config_base_0.cnf, config_base_1.cnf,
+will be stored. Depending on the number of parameters set, files will be labeled `config_base_0.cnf`, `config_base_1.cnf`,
 etc.. May be specified as absolute path, or if in reconbench directory, can specify as relative
-  - `param value`: assign a scanner parameter to value. Please see `sampler/pc_generator.cpp`, as well as the original paper,
+  - `param value` assign a scanner parameter to value. Please see `sampler/pc_generator.cpp`, as well as the original paper,
 for further description on the parameters.
-  - `param range min_value max_value number`: for a given parameter, assign a range of values, starting from min_value
-to max_value, in uniform increments, with number being the amount generated.
+  - `param range min_value max_value number` for a given parameter, assign a range of values, starting from `min_value`
+to `max_value`, in uniform increments, with number being the amount generated.
 
 It is necessary to at least supply the image resolution and number of scans. All other parameters are optional, with
 defaults already at hand - see `sampler/UniformSampler.cpp` for default parameters.
@@ -138,12 +143,23 @@ defaults already at hand - see `sampler/UniformSampler.cpp` for default paramete
 To generate the point cloud, from within the reconbench directory:
 
 - `python scripts/RunSampler.py config_file`
-
-  - `config_file` is the aforementioned configuration file generated through pc_generator. The result is a .npts file,
-as well as a .mov file, which is a movie of all scans and laser stripes taken through the scanning simulation.
+- `config_file` is the aforementioned configuration file generated through `pc_generator`. The result is a .npts file,
+  as well as a .mov file, which is a movie of all scans and laser stripes taken through the scanning simulation.
 
 We have provided some example config files for the bumps shape, varying in increasing resolution, found
-in data/pcs/bumps. Give the above a try to produce the point clouds for these config files.
+in `data/pcs/bumps`. Give the above a try to produce the point clouds for these config files.
+
+Example:
+
+```
+python scripts/RunSampler.py data/pcs/bumps/bumps_0.cnf && \
+python scripts/RunSampler.py data/pcs/bumps/bumps_1.cnf && \
+python scripts/RunSampler.py data/pcs/bumps/bumps_2.cnf && \
+python scripts/RunSampler.py data/pcs/bumps/bumps_3.cnf && \
+python scripts/RunSampler.py data/pcs/bumps/bumps_4.cnf
+```
+
+
 
 Reconstruction
 --------------
@@ -151,7 +167,7 @@ Reconstruction
 We have provided a script to more easily run reconstruction algorithms on the generated point clouds. As
 every reconstruction algorithm has its own set of parameters, we require the user to provide a script to run
 their algorithm, and to modify `scripts/scripts_recon.py` to support their algorithm. As an example, we have included
-Poisson Surface Reconstruction and its associated script, in the recon directory. Paths can be either absolute,
+Poisson Surface Reconstruction and its associated script, in the `recon` directory. Paths can be either absolute,
 or relative to the reconbench directory. See `data/meshes/bumps/recon_config.cnf` to see how to set parameters
 to your algorithm. Once all set, algorithms may be run in batch by:
 
@@ -159,6 +175,14 @@ to your algorithm. Once all set, algorithms may be run in batch by:
 
 We suggest compiling Poisson Surface Reconstruction, and running the above command on the "bumps" point clouds
 produced above to get a feel for the reconstruction script and configuration.
+
+Example:
+
+```
+python scripts/scripts_recon.py data/meshes/bumps/recon_config.cnf
+```
+
+
 
 Evaluation
 ----------
@@ -178,23 +202,34 @@ so please use best judgement in determining a sufficient number of samples.
 Evaluation may then be performed as follows:
 
 - `./bin/run_evaluation reconstructed_mesh implicit_surface dense_sampling output_base write_correspondences`
-
-  - `reconstructed_mesh` is the mesh output from the reconstruction algorithm.
+- `reconstructed_mesh` is the mesh output from the reconstruction algorithm.
   - `implicit_surface` is the MPU surface file.
   - `dense_sampling` is the dense uniformly sampled point cloud.
   - `output_base` is the base file from which the reconstruction results will be written to. For instance, if
-'results' is specified, then results.dist, results.recon, and optionally results.i2m and results.m2i will
+  'results' is specified, then results.dist, results.recon, and optionally results.i2m and results.m2i will
 be output.
-  - `write_correspondences` is a flag indicating whether or not (1 or 0) the implicit to mesh and mesh to implicit
-point correspondences are to be written out (the .i2m and .m2i files).
+- `write_correspondences` is a flag indicating whether or not (1 or 0) the implicit to mesh and mesh to implicit
+  point correspondences are to be written out (the .i2m and .m2i files).
 
-The .dist file contains the individual distributions of the positional and normal error metrics: min, lower quartile,
-median, upper quartile, max, and mean. The .recon file contains topological information about the mesh, see
-`evaluator/GlobalStats.cpp` for more information. The m2i and i2m files may be read in via
+The `.dist` file contains the individual distributions of the positional and normal error metrics: min, lower quartile,
+median, upper quartile, max, and mean. The `.recon` file contains topological information about the mesh, see
+`evaluator/GlobalStats.cpp` for more information. The `.m2i` and `.i2m` files may be read in via
 `evaluator/ShortestDistanceMap.cpp`.
 
 We suggest running evaluation on the surfaces produced via Poisson Surface Reconstruction. Please see
 `modeling/models/bumps` for the reference point cloud produced via the particle system.
+
+Example:
+
+```
+./bin/run_evaluation data/meshes/bumps/poisson/bumps_0.ply modeling/models/bumps/bumps.mpu modeling/models/bumps/reference.npts results_bumps_0 1 && \
+./bin/run_evaluation data/meshes/bumps/poisson/bumps_1.ply modeling/models/bumps/bumps.mpu modeling/models/bumps/reference.npts results_bumps_1 1 && \
+./bin/run_evaluation data/meshes/bumps/poisson/bumps_2.ply modeling/models/bumps/bumps.mpu modeling/models/bumps/reference.npts results_bumps_2 1 && \
+./bin/run_evaluation data/meshes/bumps/poisson/bumps_3.ply modeling/models/bumps/bumps.mpu modeling/models/bumps/reference.npts results_bumps_3 1 && \
+./bin/run_evaluation data/meshes/bumps/poisson/bumps_4.ply modeling/models/bumps/bumps.mpu modeling/models/bumps/reference.npts results_bumps_4 1
+```
+
+
 
 
 Plotting Results
@@ -204,21 +239,31 @@ From the .dist file(s) generated through evaluation, we allow for two different 
 To generate a distribution over a single point cloud:
 
 - `./bin/single_distribution dist_file output_base`
-
-  - `dist_file` is the .dist file generated through `bin/run_evaluation`.
+- `dist_file` is the .dist file generated through `bin/run_evaluation`.
   - `output_base` is the base file name from which two plots, in pdf, will be generated. One is a box plot of the
-positional error distribution, and the other is a box plot of the normal error distribution. This is with
+  positional error distribution, and the other is a box plot of the normal error distribution. This is with
 respect to a single point cloud.
+
+Example:
+
+```
+./bin/single_distribution results_bumps_0.dist results_bumps_plot_single
+```
 
 To generate distribution plots over a collection of point clouds:
 
 - `./bin/aggregate_distribution dist_base num_pcs output_base`
-
-  - `dist_base` is the base file name which the .dist files over all reconstruction evaluations reside. They must
-be numbered as dist_base_0.dist, dist_base_1.dist, ... dist_base_(num_pcs-1).dist.
-  - `num_pcs` is the number of point clouds over the distribution.
+- `dist_base` is the base file name which the .dist files over all reconstruction evaluations reside. They must
+  be numbered as `dist_base_0.dist`, `dist_base_1.dist`, ... `dist_base_(num_pcs-1).dist`.
+- `num_pcs` is the number of point clouds over the distribution.
   - `output_base` is the base file name from which four plots, in pdf, will be generated. These are mean distance
-distribution, Hausdorff distance distribution, mean normal deviation distribution, and max normal deviation distribution.
+  distribution, Hausdorff distance distribution, mean normal deviation distribution, and max normal deviation distribution.
+
+Example:
+
+```
+./bin/aggregate_distribution results_bumps 5 results_bumps_plot
+```
 
 We suggest running the plotting executables on the running example, both individual and aggregate distributions,
 to get a feel for the plotting.
