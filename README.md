@@ -16,10 +16,6 @@ rm *.tar.gz
 
 Docker
 ------
-The docker image contains all the dataset and compiled binaries in a contarized ubuntu 18.04. However, if you want to build the binaries or even the image on your own refer to my github:
-
-http://github.com/fragofer/reconbench
-
 Download the docker image
 
 ```
@@ -32,8 +28,12 @@ docker run --rm -it fragofer/reconbench bash
 
 Run an specific command inside the container
 ```
-docker run --rm fragofer/reconbench distance <arg>
+docker run --rm fragofer/reconbench <bin_file> <arg>
 ```
+
+The docker image contains all the dataset and compiled binaries in a contarized ubuntu 18.04. However, if you want to build the binaries or even the image on your own refer to my github:
+
+http://github.com/fragofer/reconbench
 
 Rebuild the image
 
