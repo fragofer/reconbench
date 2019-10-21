@@ -130,7 +130,8 @@ int main(int argc, char** argv)  {
 	int result = system(exec_gnu_dist);
 	result = system(exec_gnu_angle);
 
-	char rm_exec[500];
-	sprintf(rm_exec, "rm %s %s %s %s %s", data_filename.c_str(), dist_filename.c_str(), angle_filename.c_str(), dist_eps.c_str(), angle_eps.c_str());
-	result = system(rm_exec);
+//	char rm_exec[500];
+//	sprintf(rm_exec, "rm %s %s %s %s %s", data_filename.c_str(), dist_filename.c_str(), angle_filename.c_str(), dist_eps.c_str(), angle_eps.c_str());
+//	result = system(rm_exec);
+
 }
