@@ -10,8 +10,8 @@ Download datasets:
 ```
 cd data
 wget -i dataset.txt
-for f in *.tar.gz; do tar -xvf "$f"; done
-rm *.tar.gz
+for f in *.tar.gz; do tar -xvf "$f" -C pcs && rm "$f"; done
+mv *.mpu models
 ```
 
 Docker
@@ -47,22 +47,32 @@ Note that in above example, the container name `reconbench` is local to your com
 
  
 
+## Folder structure and name convention
+
+In order to put all the data files together and alleviate the pain of working with volumes in docker, the following folder structure is needed to follow to avoid erase data accidentally due to read only nature of containers:
+
+- `data`  Dataset path for MPU models, point clouds and reconstructed meshes
+  - `data/meshes/<model>/<algo>/`  Reconstruction results for each `model` and algorithm `algo`
+  - `data/pcs/<model>/`  Sampled point clouds from each MPU `model`
+  - `data/models/`  location of MPU model files
+- `recon/<algo>/`  Reconstruction algorithms sources and binaries
+- `bin` Compiled sources
+- `scripts` Python helper scripts
+
+
+
 An Evaluation and Comparison of Surface Reconstruction
 ------------------------------------------------------
 
-As part of our benchmark, we have included the source code for surface modeling, sampling, reconstruction,
-evaluation, and plotting results. Here we provide details regarding the various executables necessary for each
-of these tasks. Throughout the description, we have provided example data and instructions on how to process
-the data to produce error plots.
+As part of our benchmark, we have included the source code for surface modeling, sampling, reconstruction, evaluation, and plotting results. Here we provide details regarding the various executables necessary for each of these tasks. Throughout the description, we have provided example data and instructions on how to process the data to produce error plots.
 
 
 Compilation
 -----------
 
 At the top-level directory (reconbench), simply type make. This will compile all libraries, and place all
-executables in the bin directory. We have made an attempt to make the source as self-contained as possible,
-and so it should compile fine on linux and mac; we have not tested it on windows. However, the following
-libraries/executables are not included and are necessary:
+executables in the bin directory. We have made an attempt to make the source as self-contained as possible, and so it should compile fine on linux and mac; we have not tested it on windows. However, the following libraries/executables are not included and are necessary:
+
 - libpng12
 - lapack/blas
 - ffmpeg
@@ -79,9 +89,9 @@ for mac (i.e. macports).
  sudo apt-get install freeglut3-dev libopenblas-dev libpng-dev bison flex
 ```
 
-### Optional packages (for visualization):
+### Optional packages (for visualization and helper scripts):
 ```
- sudo apt-get install gnuplot ffmpeg texlive-font-utils
+ sudo apt-get install gnuplot ffmpeg texlive-font-utils python imagemagick
 ```
 
 Surface Modeling
@@ -127,24 +137,17 @@ files, followed by executing the configuration files to obtain the point cloud. 
 
 - `./bin/pc_generator implicit_surface config_base ([param value])* ([param range min_value max_value number])*`
 
-  - `implicit_surface` is an MPU surface file - may be specified as absolute path, or if in reconbench directory,
-can specify as relative.
-  - `config_base` represents the base file name at which the configuration, and subsequently point cloud, files
-will be stored. Depending on the number of parameters set, files will be labeled `config_base_0.cnf`, `config_base_1.cnf`,
-etc.. May be specified as absolute path, or if in reconbench directory, can specify as relative
-  - `param value` assign a scanner parameter to value. Please see `sampler/pc_generator.cpp`, as well as the original paper,
-for further description on the parameters.
-  - `param range min_value max_value number` for a given parameter, assign a range of values, starting from `min_value`
-to `max_value`, in uniform increments, with number being the amount generated.
+  - `implicit_surface` is an MPU surface file - may be specified as absolute path, or if in reconbench directory, can specify as relative.
+- `config_base` represents the base file name at which the configuration, and subsequently point cloud, files will be stored. Depending on the number of parameters set, files will be labeled `config_base_0.cnf`, `config_base_1.cnf`, etc.. May be specified as absolute path, or if in reconbench directory, can specify as relative
+  - `param value` assign a scanner parameter to value. Please see `sampler/pc_generator.cpp`, as well as the original paper, for further description on the parameters.
+- `param range min_value max_value number` for a given parameter, assign a range of values, starting from `min_value` to `max_value`, in uniform increments, with number being the amount generated.
 
-It is necessary to at least supply the image resolution and number of scans. All other parameters are optional, with
-defaults already at hand - see `sampler/UniformSampler.cpp` for default parameters.
+It is necessary to at least supply the image resolution and number of scans. All other parameters are optional, with defaults already at hand - see `sampler/UniformSampler.cpp` for default parameters.
 
 To generate the point cloud, from within the reconbench directory:
 
 - `python scripts/RunSampler.py config_file`
-- `config_file` is the aforementioned configuration file generated through `pc_generator`. The result is a .npts file,
-  as well as a .mov file, which is a movie of all scans and laser stripes taken through the scanning simulation.
+- `config_file` is the aforementioned configuration file generated through `pc_generator`. The result is a .npts file, as well as a .avi file, which is a movie of all scans and laser stripes taken through the scanning simulation.
 
 We have provided some example config files for the bumps shape, varying in increasing resolution, found
 in `data/pcs/bumps`. Give the above a try to produce the point clouds for these config files.
@@ -166,15 +169,11 @@ Reconstruction
 
 We have provided a script to more easily run reconstruction algorithms on the generated point clouds. As
 every reconstruction algorithm has its own set of parameters, we require the user to provide a script to run
-their algorithm, and to modify `scripts/scripts_recon.py` to support their algorithm. As an example, we have included
-Poisson Surface Reconstruction and its associated script, in the `recon` directory. Paths can be either absolute,
-or relative to the reconbench directory. See `data/meshes/bumps/recon_config.cnf` to see how to set parameters
-to your algorithm. Once all set, algorithms may be run in batch by:
+their algorithm, and to modify `scripts/scripts_recon.py` to support their algorithm. As an example, we have included Poisson Surface Reconstruction and its associated script, in the `recon` directory. Paths can be either absolute, or relative to the reconbench directory. See `data/meshes/bumps/recon_config.cnf` to see how to set parameters to your algorithm. Once all set, algorithms may be run in batch by (for all .npts files located in indir field from config_file):
 
 - `python scripts/scripts_recon.py config_file`
 
-We suggest compiling Poisson Surface Reconstruction, and running the above command on the "bumps" point clouds
-produced above to get a feel for the reconstruction script and configuration.
+We suggest compiling Poisson Surface Reconstruction, and running the above command on the "bumps" point clouds produced above to get a feel for the reconstruction script and configuration.
 
 Example:
 
@@ -188,16 +187,13 @@ Evaluation
 ----------
 
 Evaluation requires: the MPU implicit surface, a dense uniform sampling of the surface and the output
-reconstructed mesh. We have provided dense uniform samplings used in our benchmark in the `modeling/models`
-directory. However, if you have generated your own implicits, you must generate these samplings yourself.
+reconstructed mesh. We have provided dense uniform samplings used in our benchmark in the `data/models` directory. However, if you have generated your own implicits, you must generate these samplings yourself.
 We have provided an executable to do so:
 
 - `./bin/implicit_uniform implicit_surface num_samples`
 
   - `implicit_surface` is the MPU surface file.
-  - `num_samples` is the number of samples to distribute on the surface. This should be a sufficiently large number
-to guarantee that all surface features are covered by the sampling. Of course this depends on the shape,
-so please use best judgement in determining a sufficient number of samples.
+  - `num_samples` is the number of samples to distribute on the surface. This should be a sufficiently large number to guarantee that all surface features are covered by the sampling. Of course this depends on the shape, so please use best judgement in determining a sufficient number of samples.
 
 Evaluation may then be performed as follows:
 
@@ -208,25 +204,21 @@ Evaluation may then be performed as follows:
   - `output_base` is the base file from which the reconstruction results will be written to. For instance, if
   'results' is specified, then results.dist, results.recon, and optionally results.i2m and results.m2i will
 be output.
-- `write_correspondences` is a flag indicating whether or not (1 or 0) the implicit to mesh and mesh to implicit
-  point correspondences are to be written out (the .i2m and .m2i files).
+- `write_correspondences` is a flag indicating whether or not (1 or 0) the implicit to mesh and mesh to implicit point correspondences are to be written out (the .i2m and .m2i files).
 
-The `.dist` file contains the individual distributions of the positional and normal error metrics: min, lower quartile,
-median, upper quartile, max, and mean. The `.recon` file contains topological information about the mesh, see
-`evaluator/GlobalStats.cpp` for more information. The `.m2i` and `.i2m` files may be read in via
-`evaluator/ShortestDistanceMap.cpp`.
+The `.dist` file contains the individual distributions of the positional and normal error metrics: min, lower quartile, median, upper quartile, max, and mean. The `.recon` file contains topological information about the mesh, see `evaluator/GlobalStats.cpp` for more information. The `.m2i` and `.i2m` files may be read in via `evaluator/ShortestDistanceMap.cpp`.
 
 We suggest running evaluation on the surfaces produced via Poisson Surface Reconstruction. Please see
-`modeling/models/bumps` for the reference point cloud produced via the particle system.
+`data/models/bumps` for the reference point cloud produced via the particle system.
 
 Example:
 
 ```
-./bin/run_evaluation data/meshes/bumps/poisson/bumps_0.ply modeling/models/bumps/bumps.mpu modeling/models/bumps/reference.npts results_bumps_0 1 && \
-./bin/run_evaluation data/meshes/bumps/poisson/bumps_1.ply modeling/models/bumps/bumps.mpu modeling/models/bumps/reference.npts results_bumps_1 1 && \
-./bin/run_evaluation data/meshes/bumps/poisson/bumps_2.ply modeling/models/bumps/bumps.mpu modeling/models/bumps/reference.npts results_bumps_2 1 && \
-./bin/run_evaluation data/meshes/bumps/poisson/bumps_3.ply modeling/models/bumps/bumps.mpu modeling/models/bumps/reference.npts results_bumps_3 1 && \
-./bin/run_evaluation data/meshes/bumps/poisson/bumps_4.ply modeling/models/bumps/bumps.mpu modeling/models/bumps/reference.npts results_bumps_4 1
+./bin/run_evaluation data/meshes/bumps/poisson/bumps_0.ply data/models/bumps.mpu data/pcs/bumps/reference.npts data/meshes/bumps/poisson/results_bumps_0 1 && \
+./bin/run_evaluation data/meshes/bumps/poisson/bumps_1.ply data/models/bumps.mpu data/pcs/bumps/reference.npts data/meshes/bumps/poisson/results_bumps_1 1 && \
+./bin/run_evaluation data/meshes/bumps/poisson/bumps_2.ply data/models/bumps.mpu data/pcs/bumps/reference.npts data/meshes/bumps/poisson/results_bumps_2 1 && \
+./bin/run_evaluation data/meshes/bumps/poisson/bumps_3.ply data/models/bumps.mpu data/pcs/bumps/reference.npts data/meshes/bumps/poisson/results_bumps_3 1 && \
+./bin/run_evaluation data/meshes/bumps/poisson/bumps_4.ply data/models/bumps.mpu data/pcs/bumps/reference.npts data/meshes/bumps/poisson/results_bumps_4 1
 ```
 
 
@@ -240,9 +232,7 @@ To generate a distribution over a single point cloud:
 
 - `./bin/single_distribution dist_file output_base`
 - `dist_file` is the .dist file generated through `bin/run_evaluation`.
-  - `output_base` is the base file name from which two plots, in pdf, will be generated. One is a box plot of the
-  positional error distribution, and the other is a box plot of the normal error distribution. This is with
-respect to a single point cloud.
+  - `output_base` is the base file name from which two plots, in pdf, will be generated. One is a box plot of the positional error distribution, and the other is a box plot of the normal error distribution. This is with respect to a single point cloud.
 
 Example:
 
@@ -253,11 +243,9 @@ Example:
 To generate distribution plots over a collection of point clouds:
 
 - `./bin/aggregate_distribution dist_base num_pcs output_base`
-- `dist_base` is the base file name which the .dist files over all reconstruction evaluations reside. They must
-  be numbered as `dist_base_0.dist`, `dist_base_1.dist`, ... `dist_base_(num_pcs-1).dist`.
+- `dist_base` is the base file name which the .dist files over all reconstruction evaluations reside. They must be numbered as `dist_base_0.dist`, `dist_base_1.dist`, ... `dist_base_(num_pcs-1).dist`.
 - `num_pcs` is the number of point clouds over the distribution.
-  - `output_base` is the base file name from which four plots, in pdf, will be generated. These are mean distance
-  distribution, Hausdorff distance distribution, mean normal deviation distribution, and max normal deviation distribution.
+  - `output_base` is the base file name from which four plots, in pdf, will be generated. These are mean distance distribution, Hausdorff distance distribution, mean normal deviation distribution, and max normal deviation distribution.
 
 Example:
 
@@ -265,13 +253,11 @@ Example:
 ./bin/aggregate_distribution results_bumps 5 results_bumps_plot
 ```
 
-We suggest running the plotting executables on the running example, both individual and aggregate distributions,
-to get a feel for the plotting.
+We suggest running the plotting executables on the running example, both individual and aggregate distributions, to get a feel for the plotting.
 
 
 Contact
 -------
 
 Please email bergerm@cs.utah.edu for any questions, comments, suggestions, and bug reporting. Also,
-please send an email if you are interested in contributing new data! We hope our reconstruction benchmark will
-grow over time, in order to provide a rich amount of data for surface reconstruction researchers and practitioners.
+please send an email if you are interested in contributing new data! We hope our reconstruction benchmark will grow over time, in order to provide a rich amount of data for surface reconstruction researchers and practitioners.

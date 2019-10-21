@@ -1,5 +1,6 @@
 FROM ubuntu:18.04
-MAINTAINER Francisco Gómez-Fernández "fgomez@dc.uba.ar"
+LABEL maintainer="Francisco Gómez-Fernández <fgomez@dc.uba.ar>"
+
 
 # Install system packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -13,7 +14,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       libxi-dev \
       freeglut3-dev \
       libopenblas-dev \
-      libpng-dev
+      libpng-dev \
+      python \
+      gnuplot \
+      ffmpeg \
+      texlive-font-utils \
+      imagemagick \
+      nano
 
 RUN git clone --depth 1 https://github.com/fragofer/reconbench.git
 
@@ -21,14 +28,8 @@ WORKDIR /reconbench
 
 RUN make
 
+RUN cd data && wget -i dataset.txt && \
+      for f in *.tar.gz; do tar -xvf "$f" -C pcs && rm "$f"; done && \
+      mv *.mpu models
+
 ENV PATH="/reconbench/bin:${PATH}"
-
-# ENV NB_USER keras
-# ENV NB_UID 1014
-
-#RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
-#    chown $NB_USER $CONDA_DIR -R && \
-#    mkdir -p /src && \
-#    chown $NB_USER /src
-
-#USER $NB_USER
