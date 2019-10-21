@@ -1,7 +1,7 @@
 [sampler]
 pathdir:bin
 sampling_type:uniform
-infile:modeling/models/bumps/bumps.mpu
+infile:data/models/bumps.mpu
 outfile:data/pcs/bumps/bumps_4.npts
 [uniform]
 exec_name:uniform_sampler
