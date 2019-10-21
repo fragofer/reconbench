@@ -12,6 +12,6 @@ done
 
 rm ${base_file}*.png
 
-ffmpeg -f image2 -r 20 -b 800000 -i ${base_file}%05d.jpg ${base_file}.avi
+ffmpeg -f image2 -r 20 -i ${base_file}%05d.jpg -b:v 800000 ${base_file}.avi
 
 rm ${base_file}*.jpg
