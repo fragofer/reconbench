@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       freeglut3-dev \
       libopenblas-dev \
       libpng-dev \
+      wget \
       python \
       gnuplot \
       ffmpeg \

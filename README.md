@@ -43,7 +43,7 @@ cd reconbench/docker
 docker build -t fragofer/reconbench .
 ```
 
-Note that in above example, the container name `reconbench` is local to your computer.
+Note that in the above example, the created image will be local to your computer.
 
  
 
@@ -107,11 +107,8 @@ triangulated surface meshes:
   - `min_samples` specifies the minimum number of triangles necessary to fit a shape function. It also
 has an effect on CSG operations. A value of 6 tends to be a good trade-off.
   - `fit_epsilon` specifies the quality of a fit, as a percentage of the bounding box of the input mesh ->
-if satisfied, subdivision is terminated in the octree. This is largely dependent on the complexity of the
-shape, and the tesselation. Typical values range from 0.005 - 0.01. Larger values result in details being
-smoothed out.
-  - `covering` specifies the radius of the sphere which occupies each octree cell, specified as a fraction of
-half the bounding box diagonal. Typical values range from 1.0 - 1.25.
+if satisfied, subdivision is terminated in the octree. This is largely dependent on the complexity of the shape, and the tesselation. Typical values range from 0.005 - 0.01. Larger values result in details being smoothed out.
+- `covering` specifies the radius of the sphere which occupies each octree cell, specified as a fraction of half the bounding box diagonal. Typical values range from 1.0 - 1.25.
 
 We note that creating MPU polygonal surfaces from triangle meshes can be a trial-and-error process, as
 certain surface meshes may be difficult to fit shape functions to. Hence to facilitate this, we have
@@ -132,8 +129,7 @@ Synthetic Scanning
 ------------------
 
 From the MPU surfaces we next allow for synthetically scanning the surfaces, simulating the process of
-an optical triangulation-based scanner. We break up point cloud generation into generation of configuration
-files, followed by executing the configuration files to obtain the point cloud. To generate configuration files:
+an optical triangulation-based scanner. We break up point cloud generation into generation of configuration files, followed by executing the configuration files to obtain the point cloud. To generate configuration files:
 
 - `./bin/pc_generator implicit_surface config_base ([param value])* ([param range min_value max_value number])*`
 
