@@ -49,7 +49,7 @@ Note that in the above example, the created image will be local to your computer
 
 ## Folder structure and name convention
 
-In order to put all the data files together and alleviate the pain of working with volumes in docker, the following folder structure is needed to follow to avoid erase data accidentally due to read only nature of containers:
+In order to put all the data files together and alleviate the pain of working with volumes in docker, the following folder structure is needed to avoid erasing data accidentally due to read only nature of containers:
 
 - `data`  Dataset path for MPU models, point clouds and reconstructed meshes
   - `data/meshes/<model>/<algo>/`  Reconstruction results for each `model` and algorithm `algo`
@@ -110,10 +110,7 @@ has an effect on CSG operations. A value of 6 tends to be a good trade-off.
 if satisfied, subdivision is terminated in the octree. This is largely dependent on the complexity of the shape, and the tesselation. Typical values range from 0.005 - 0.01. Larger values result in details being smoothed out.
 - `covering` specifies the radius of the sphere which occupies each octree cell, specified as a fraction of half the bounding box diagonal. Typical values range from 1.0 - 1.25.
 
-We note that creating MPU polygonal surfaces from triangle meshes can be a trial-and-error process, as
-certain surface meshes may be difficult to fit shape functions to. Hence to facilitate this, we have
-provided a marching cubes implementation so that one may quickly observe the resulting zero-set of
-the implicit function:
+We note that creating MPU polygonal surfaces from triangle meshes can be a trial-and-error process, as certain surface meshes may be difficult to fit shape functions to. Hence to facilitate this, we have provided a marching cubes implementation so that one may quickly observe the resulting zero-set of the implicit function:
 
 - `./bin/isosurface implicit_surface resolution output_surface`
 
@@ -122,14 +119,12 @@ the implicit function:
 stay within the bounds of the MPU surface definition.
   - `output_surface` is the resulting isosurface, either off or obj format.
 
-Included in `modeling/models` is an example implicit surface, bumps, used in the "simple shapes" part
-of the benchmark.
+Included in `modeling/models` is an example implicit surface, bumps, used in the "simple shapes" part of the benchmark.
 
 Synthetic Scanning
 ------------------
 
-From the MPU surfaces we next allow for synthetically scanning the surfaces, simulating the process of
-an optical triangulation-based scanner. We break up point cloud generation into generation of configuration files, followed by executing the configuration files to obtain the point cloud. To generate configuration files:
+From the MPU surfaces we next allow for synthetically scanning the surfaces, simulating the process of an optical triangulation-based scanner. We break up point cloud generation into generation of configuration files, followed by executing the configuration files to obtain the point cloud. To generate configuration files:
 
 - `./bin/pc_generator implicit_surface config_base ([param value])* ([param range min_value max_value number])*`
 
@@ -163,9 +158,7 @@ python scripts/RunSampler.py data/pcs/bumps/bumps_4.cnf
 Reconstruction
 --------------
 
-We have provided a script to more easily run reconstruction algorithms on the generated point clouds. As
-every reconstruction algorithm has its own set of parameters, we require the user to provide a script to run
-their algorithm, and to modify `scripts/scripts_recon.py` to support their algorithm. As an example, we have included Poisson Surface Reconstruction and its associated script, in the `recon` directory. Paths can be either absolute, or relative to the reconbench directory. See `data/meshes/bumps/recon_config.cnf` to see how to set parameters to your algorithm. Once all set, algorithms may be run in batch by (for all .npts files located in indir field from config_file):
+We have provided a script to more easily run reconstruction algorithms on the generated point clouds. As every reconstruction algorithm has its own set of parameters, we require the user to provide a script to run their algorithm, and to modify `scripts/scripts_recon.py` to support their algorithm. As an example, we have included Poisson Surface Reconstruction and its associated script, in the `recon` directory. Paths can be either absolute, or relative to the reconbench directory. See `data/meshes/bumps/recon_config.cnf` to see how to set parameters to your algorithm. Once all set, algorithms may be run in batch by (for all .npts files located in indir field from config_file):
 
 - `python scripts/scripts_recon.py config_file`
 
@@ -182,9 +175,7 @@ python scripts/scripts_recon.py data/meshes/bumps/recon_config.cnf
 Evaluation
 ----------
 
-Evaluation requires: the MPU implicit surface, a dense uniform sampling of the surface and the output
-reconstructed mesh. We have provided dense uniform samplings used in our benchmark in the `data/models` directory. However, if you have generated your own implicits, you must generate these samplings yourself.
-We have provided an executable to do so:
+Evaluation requires: the MPU implicit surface, a dense uniform sampling of the surface and the output reconstructed mesh. We have provided dense uniform samplings used in our benchmark in the `data/models` directory. However, if you have generated your own implicits, you must generate these samplings yourself. We have provided an executable to do so:
 
 - `./bin/implicit_uniform implicit_surface num_samples`
 
@@ -197,15 +188,12 @@ Evaluation may then be performed as follows:
 - `reconstructed_mesh` is the mesh output from the reconstruction algorithm.
   - `implicit_surface` is the MPU surface file.
   - `dense_sampling` is the dense uniformly sampled point cloud.
-  - `output_base` is the base file from which the reconstruction results will be written to. For instance, if
-  'results' is specified, then results.dist, results.recon, and optionally results.i2m and results.m2i will
-be output.
+  - `output_base` is the base file from which the reconstruction results will be written to. For instance, if 'results' is specified, then results.dist, results.recon, and optionally results.i2m and results.m2i will be output.
 - `write_correspondences` is a flag indicating whether or not (1 or 0) the implicit to mesh and mesh to implicit point correspondences are to be written out (the .i2m and .m2i files).
 
 The `.dist` file contains the individual distributions of the positional and normal error metrics: min, lower quartile, median, upper quartile, max, and mean. The `.recon` file contains topological information about the mesh, see `evaluator/GlobalStats.cpp` for more information. The `.m2i` and `.i2m` files may be read in via `evaluator/ShortestDistanceMap.cpp`.
 
-We suggest running evaluation on the surfaces produced via Poisson Surface Reconstruction. Please see
-`data/models/bumps` for the reference point cloud produced via the particle system.
+We suggest running evaluation on the surfaces produced via Poisson Surface Reconstruction. Please see `data/models/bumps` for the reference point cloud produced via the particle system.
 
 Example:
 
@@ -223,8 +211,7 @@ Example:
 Plotting Results
 ----------------
 
-From the .dist file(s) generated through evaluation, we allow for two different options in plotting the results.
-To generate a distribution over a single point cloud:
+From the .dist file(s) generated through evaluation, we allow for two different options in plotting the results. To generate a distribution over a single point cloud:
 
 - `./bin/single_distribution dist_file output_base`
 - `dist_file` is the .dist file generated through `bin/run_evaluation`.
@@ -255,5 +242,4 @@ We suggest running the plotting executables on the running example, both individ
 Contact
 -------
 
-Please email bergerm@cs.utah.edu for any questions, comments, suggestions, and bug reporting. Also,
-please send an email if you are interested in contributing new data! We hope our reconstruction benchmark will grow over time, in order to provide a rich amount of data for surface reconstruction researchers and practitioners.
+Please email bergerm@cs.utah.edu for any questions, comments, suggestions, and bug reporting. Also, please send an email if you are interested in contributing new data! We hope our reconstruction benchmark will grow over time, in order to provide a rich amount of data for surface reconstruction researchers and practitioners.
