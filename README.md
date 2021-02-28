@@ -119,7 +119,7 @@ We note that creating MPU polygonal surfaces from triangle meshes can be a trial
 stay within the bounds of the MPU surface definition.
   - `output_surface` is the resulting isosurface, either off or obj format.
 
-Included in `modeling/models` is an example implicit surface, bumps, used in the "simple shapes" part of the benchmark.
+Included in `data/models` is an example implicit surface, bumps, used in the "simple shapes" part of the benchmark.
 
 Synthetic Scanning
 ------------------
@@ -129,9 +129,9 @@ From the MPU surfaces we next allow for synthetically scanning the surfaces, sim
 - `./bin/pc_generator implicit_surface config_base ([param value])* ([param range min_value max_value number])*`
 
   - `implicit_surface` is an MPU surface file - may be specified as absolute path, or if in reconbench directory, can specify as relative.
-- `config_base` represents the base file name at which the configuration, and subsequently point cloud, files will be stored. Depending on the number of parameters set, files will be labeled `config_base_0.cnf`, `config_base_1.cnf`, etc.. May be specified as absolute path, or if in reconbench directory, can specify as relative
+  - `config_base` represents the base file name at which the configuration, and subsequently point cloud, files will be stored. Depending on the number of parameters set, files will be labeled `config_base_0.cnf`, `config_base_1.cnf`, etc.. May be specified as absolute path, or if in reconbench directory, can specify as relative
   - `param value` assign a scanner parameter to value. Please see `sampler/pc_generator.cpp`, as well as the original paper, for further description on the parameters.
-- `param range min_value max_value number` for a given parameter, assign a range of values, starting from `min_value` to `max_value`, in uniform increments, with number being the amount generated.
+  - `param range min_value max_value number` for a given parameter, assign a range of values, starting from `min_value` to `max_value`, in uniform increments, with number being the amount generated.
 
 It is necessary to at least supply the image resolution and number of scans. All other parameters are optional, with defaults already at hand - see `sampler/UniformSampler.cpp` for default parameters.
 
@@ -185,11 +185,11 @@ Evaluation requires: the MPU implicit surface, a dense uniform sampling of the s
 Evaluation may then be performed as follows:
 
 - `./bin/run_evaluation reconstructed_mesh implicit_surface dense_sampling output_base write_correspondences`
-- `reconstructed_mesh` is the mesh output from the reconstruction algorithm.
+  - `reconstructed_mesh` is the mesh output from the reconstruction algorithm.
   - `implicit_surface` is the MPU surface file.
   - `dense_sampling` is the dense uniformly sampled point cloud.
   - `output_base` is the base file from which the reconstruction results will be written to. For instance, if 'results' is specified, then results.dist, results.recon, and optionally results.i2m and results.m2i will be output.
-- `write_correspondences` is a flag indicating whether or not (1 or 0) the implicit to mesh and mesh to implicit point correspondences are to be written out (the .i2m and .m2i files).
+  - `write_correspondences` is a flag indicating whether or not (1 or 0) the implicit to mesh and mesh to implicit point correspondences are to be written out (the .i2m and .m2i files).
 
 The `.dist` file contains the individual distributions of the positional and normal error metrics: min, lower quartile, median, upper quartile, max, and mean. The `.recon` file contains topological information about the mesh, see `evaluator/GlobalStats.cpp` for more information. The `.m2i` and `.i2m` files may be read in via `evaluator/ShortestDistanceMap.cpp`.
 
@@ -214,7 +214,7 @@ Plotting Results
 From the .dist file(s) generated through evaluation, we allow for two different options in plotting the results. To generate a distribution over a single point cloud:
 
 - `./bin/single_distribution dist_file output_base`
-- `dist_file` is the .dist file generated through `bin/run_evaluation`.
+  - `dist_file` is the .dist file generated through `bin/run_evaluation`.
   - `output_base` is the base file name from which two plots, in pdf, will be generated. One is a box plot of the positional error distribution, and the other is a box plot of the normal error distribution. This is with respect to a single point cloud.
 
 Example:
@@ -226,8 +226,8 @@ Example:
 To generate distribution plots over a collection of point clouds:
 
 - `./bin/aggregate_distribution dist_base num_pcs output_base`
-- `dist_base` is the base file name which the .dist files over all reconstruction evaluations reside. They must be numbered as `dist_base_0.dist`, `dist_base_1.dist`, ... `dist_base_(num_pcs-1).dist`.
-- `num_pcs` is the number of point clouds over the distribution.
+  - `dist_base` is the base file name which the .dist files over all reconstruction evaluations reside. They must be numbered as `dist_base_0.dist`, `dist_base_1.dist`, ... `dist_base_(num_pcs-1).dist`.
+  - `num_pcs` is the number of point clouds over the distribution.
   - `output_base` is the base file name from which four plots, in pdf, will be generated. These are mean distance distribution, Hausdorff distance distribution, mean normal deviation distribution, and max normal deviation distribution.
 
 Example:
