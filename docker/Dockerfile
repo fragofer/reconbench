@@ -1,7 +1,6 @@
 FROM ubuntu:18.04
 LABEL maintainer="Francisco Gómez-Fernández <fgomez@dc.uba.ar>"
 
-
 # Install system packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
       git \
@@ -28,9 +27,5 @@ RUN git clone --depth 1 https://github.com/fragofer/reconbench.git
 WORKDIR /reconbench
 
 RUN make
-
-RUN cd data && wget -i dataset.txt && \
-      for f in *.tar.gz; do tar -xvf "$f" -C pcs && rm "$f"; done && \
-      mv *.mpu models
 
 ENV PATH="/reconbench/bin:${PATH}"
