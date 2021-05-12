@@ -1,7 +1,7 @@
 [dir_structs]
 indir:data/pcs/bumps
 outdir:data/meshes/bumps
-pathdir:poisson/recon
+pathdir:recon/poisson
 [poisson]
 poisson_script:poisson_recon.sh
 depth:10
